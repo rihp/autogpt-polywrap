@@ -1,5 +1,4 @@
-"""This is a task planning system plugin for Auto-GPT. It is able to create tasks, elaborate a plan, improve upon it
-and check it again to keep on track.
+"""This is a Polywrap plugin for AutoGPT.
 
 built by @rihp on github"""
 
@@ -7,7 +6,7 @@ from typing import Any, Dict, List, Optional, Tuple, TypedDict, TypeVar
 
 from auto_gpt_plugin_template import AutoGPTPluginTemplate
 
-from .planner import check_plan, create_task, load_tasks, update_task_status, update_plan
+from .polywrap import use_polywrap, polywrap_bignumber
 
 PromptGenerator = TypeVar("PromptGenerator")
 
@@ -17,7 +16,7 @@ class Message(TypedDict):
     content: str
 
 
-class PlannerPlugin(AutoGPTPluginTemplate):
+class PolywrapPlugin(AutoGPTPluginTemplate):
     """
     This is a task planner system plugin for Auto-GPT which 
     adds the task planning commands to the prompt.
@@ -25,14 +24,11 @@ class PlannerPlugin(AutoGPTPluginTemplate):
 
     def __init__(self):
         super().__init__()
-        self._name = "AutoGPT-Planner-Plugin"
-        self._version = "0.1.1"
-        self._description = "This is a simple task planner module for Auto-GPT. It adds the run_planning_cycle " \
-                            "command along with other task related commands. Creates a plan.md file and tasks.json " \
-                            "to manage the workloads. For help and discussion: " \
-                            "https://discord.com/channels/1092243196446249134/1098737397094694922/threads/1102780261604790393"
+        self._name = "AutoGPT-Polywrap-Plugin"
+        self._version = "0.1.0"
+        self._description = "This is a Polywrap plugin for AutoGPT. https://polywrap.io"
 
-    def post_prompt(self, prompt: PromptGenerator) -> PromptGenerator:
+    async def post_prompt(self, prompt: PromptGenerator) -> PromptGenerator:
         """This method is called just after the generate_prompt is called,
         but actually before the prompt is generated.
         Args:
@@ -41,42 +37,19 @@ class PlannerPlugin(AutoGPTPluginTemplate):
             PromptGenerator: The prompt generator.
         """
 
+
         prompt.add_command(
-            "check_plan",
-            "Read the plan.md with the next goals to achieve",
+            "use_polywrap",
+            "uses the polywtap python client",
             {},
-            check_plan,
+            use_polywrap,
         )
 
         prompt.add_command(
-            "run_planning_cycle",
-            "Improves the current plan.md and updates it with progress",
+            "polywrap_bignumber",
+            "uses the polywrap python client",
             {},
-            update_plan,
-        )
-
-        prompt.add_command(
-            "create_task",
-            "creates a task with a task id, description and a completed status of False ",
-            {
-                "task_id": "<int>",
-                "task_description": "<The task that must be performed>",
-            },
-            create_task,
-        )
-
-        prompt.add_command(
-            "load_tasks",
-            "Checks out the task ids, their descriptionsand a completed status",
-            {},
-            load_tasks,
-        )
-
-        prompt.add_command(
-            "mark_task_completed",
-            "Updates the status of a task and marks it as completed",
-            {"task_id": "<int>"},
-            update_task_status,
+            polywrap_bignumber,
         )
 
         return prompt
@@ -243,3 +216,25 @@ class PlannerPlugin(AutoGPTPluginTemplate):
             str: The resulting response.
         """
         pass
+
+    def can_handle_report(self) -> bool:
+        """This method is called to check that the plugin can
+        handle the report method.
+        Returns:
+            bool: True if the plugin can handle the report method."""
+        return False
+    
+    def can_handle_text_embedding(self, text: str) -> bool:
+        return False
+
+    def can_handle_user_input(self, user_input: str) -> bool:
+        return False
+
+    def handle_text_embedding(self, text: str) -> list:
+        return False
+    
+    def report(self, message: str) -> None:
+        return False
+
+    def user_input(self, user_input: str) -> str:
+        return False
