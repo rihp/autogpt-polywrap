@@ -1,23 +1,30 @@
 from polywrap_client import PolywrapClient
+from typing import cast
 
 from pathlib import Path
 from polywrap_client import PolywrapClient, ClientConfig
 from polywrap_core import Uri, InvokerOptions, UriPackageOrWrapper
 from polywrap_client_config_builder import PolywrapClientConfigBuilder
-from polywrap_uri_resolvers import RecursiveResolver, StaticResolver, ExtendableUriResolver
+from polywrap_uri_resolvers import FsUriResolver,SimpleFileReader, StaticResolver, RecursiveResolver
+from polywrap_uri_resolvers import UriResolverAggregator
+
 
 import asyncio
 
 
+ETHEREUM_WRAP_CORE_URI = Uri.from_str("wrap://ens/ethers.wraps.eth")
+LOCAL_ETHEREUM_CORE_WRAPPER = Uri.from_str("wrap://fs/./cases/big-number")
 
-config = (
-        PolywrapClientConfigBuilder()
-        .add_env(Uri.from_str("ens/hello.eth"), {"hello": "world"})
-        .build()
+
+resolver = RecursiveResolver(
+    UriResolverAggregator(
+        [
+            StaticResolver({ETHEREUM_WRAP_CORE_URI: LOCAL_ETHEREUM_CORE_WRAPPER}),
+        ]
     )
+)
 
-
-
+config = ClientConfig(resolver=resolver)
 client = PolywrapClient(config)
 
 async def polywrap_bignumber():
