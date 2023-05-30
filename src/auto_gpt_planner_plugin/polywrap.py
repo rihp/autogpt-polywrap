@@ -12,8 +12,8 @@ from polywrap_uri_resolvers import UriResolverAggregator
 import asyncio
 
 
-ETHEREUM_WRAP_CORE_URI = Uri.from_str("wrap://ens/ethers.wraps.eth")
-LOCAL_ETHEREUM_CORE_WRAPPER = Uri.from_str("wrap://fs/./cases/big-number")
+ETHEREUM_WRAP_CORE_URI = Uri.from_str("wrap://ens/bignumber.wraps.eth")
+LOCAL_ETHEREUM_CORE_WRAPPER = Uri.from_str("wrap://fs/./wrappers/big-number")
 
 
 resolver = RecursiveResolver(
@@ -29,7 +29,7 @@ client = PolywrapClient(config)
 
 async def polywrap_bignumber():
     uri = Uri.from_str(
-        f'fs/{Path(__file__).parent.joinpath("cases", "big-number").absolute()}'
+        f'fs/{Path(__file__).parent.joinpath("wrappers", "big-number").absolute()}'
     )
     args = {
         "arg1": "123",  # The base number
