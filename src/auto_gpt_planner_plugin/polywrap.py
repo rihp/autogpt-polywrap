@@ -42,7 +42,13 @@ def polywrap_bignumber():
     return f"the result is {result}"
 
 
-def use_polywrap():
-    
+def explore_wrappers():z
+    # Query Database of wrappers
+
+    # Read Schema, documentation and functions
+
+    # Save this information in the AutoGPT workspace
     return "polywrap is used"
+
+
 
