@@ -12,24 +12,22 @@ from polywrap_uri_resolvers import UriResolverAggregator
 import asyncio
 
 
-ETHEREUM_WRAP_CORE_URI = Uri.from_str("wrap://ens/bignumber.wraps.eth")
-LOCAL_ETHEREUM_CORE_WRAPPER = Uri.from_str("wrap://fs/./wrappers/big-number")
+BIGNUMBER_URI = Uri.from_str("wrap://ens/bignumber.wraps.eth")
+BIGNUMBER_WRAPPER = Uri.from_str("wrap://fs/./wrappers/big-number")
 
 
-resolver = RecursiveResolver(
-    UriResolverAggregator(
-        [
-            StaticResolver({ETHEREUM_WRAP_CORE_URI: LOCAL_ETHEREUM_CORE_WRAPPER}),
-        ]
-    )
-)
+resolver = FsUriResolver(SimpleFileReader())
 
 config = ClientConfig(resolver=resolver)
 client = PolywrapClient(config)
 
-async def polywrap_bignumber():
+
+
+def polywrap_bignumber():
+    
+
     uri = Uri.from_str(
-        f'fs/{Path(__file__).parent.joinpath("wrappers", "big-number").absolute()}'
+        f'fs//Users/robertohenriquez/pycode/cloud/AGI/Auto-GPT/autogpt/auto_gpt_workspace/wrappers/bignumber'
     )
     args = {
         "arg1": "123",  # The base number
@@ -40,7 +38,7 @@ async def polywrap_bignumber():
     options: InvokerOptions[UriPackageOrWrapper] = InvokerOptions(
         uri=uri, method="method", args=args, encode_result=False
     )
-    result = await client.invoke(options)
+    result = asyncio.run(client.invoke(options))
     return f"the result is {result}"
 
 
@@ -48,4 +46,3 @@ def use_polywrap():
     
     return "polywrap is used"
 
-asyncio.run(polywrap_bignumber())

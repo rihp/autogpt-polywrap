@@ -28,7 +28,7 @@ class PolywrapPlugin(AutoGPTPluginTemplate):
         self._version = "0.1.0"
         self._description = "This is a Polywrap plugin for AutoGPT. https://polywrap.io"
 
-    async def post_prompt(self, prompt: PromptGenerator) -> PromptGenerator:
+    def post_prompt(self, prompt: PromptGenerator) -> PromptGenerator:
         """This method is called just after the generate_prompt is called,
         but actually before the prompt is generated.
         Args:
