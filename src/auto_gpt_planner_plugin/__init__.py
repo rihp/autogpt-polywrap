@@ -6,7 +6,7 @@ from typing import Any, Dict, List, Optional, Tuple, TypedDict, TypeVar
 
 from auto_gpt_plugin_template import AutoGPTPluginTemplate
 
-from .polywrap import use_polywrap, polywrap_bignumber
+from .polywrap import use_polywrap, polywrap_bignumber, polywrap_ipfs
 
 PromptGenerator = TypeVar("PromptGenerator")
 
@@ -39,10 +39,10 @@ class PolywrapPlugin(AutoGPTPluginTemplate):
 
 
         prompt.add_command(
-            "use_polywrap",
+            "polywrap_ipfs",
             "uses the polywtap python client",
             {},
-            use_polywrap,
+            polywrap_ipfs,
         )
 
         prompt.add_command(
