@@ -42,7 +42,7 @@ def polywrap_bignumber():
     return f"the result is {result}"
 
 
-def explore_wrappers():z
+def explore_wrappers():
     # Query Database of wrappers
 
     # Read Schema, documentation and functions
